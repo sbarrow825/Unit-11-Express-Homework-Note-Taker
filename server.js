@@ -28,13 +28,27 @@ app.post("/api/notes", (req, res) => {
     for (const note of allNotes) {
         allIDs.push(note.id)
     }
-    if (Math.max(...allIDs)) {
+    console.log(allIDs.length)
+    if (allIDs.length) {
         var nextID = Math.max(...allIDs) + 1;
     } else {
         var nextID = 1;
     }
     noteToAdd["id"] = nextID
     allNotes.push(noteToAdd);
+    fs.writeFile(path.join(__dirname, "db", "db.json"), JSON.stringify(allNotes), err => {
+        if (err) throw err
+    })
+    res.end()
+})
+
+app.delete("/api/notes/:id", (req, res) => {
+    var allNotes = JSON.parse(fs.readFileSync(path.join(__dirname, "db", "db.json")))
+    for (i in allNotes) {
+        if (allNotes[i].id === parseInt(req.params.id)) {
+            allNotes.splice(i, 1)
+        }
+    }
     fs.writeFile(path.join(__dirname, "db", "db.json"), JSON.stringify(allNotes), err => {
         if (err) throw err
     })
