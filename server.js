@@ -28,7 +28,11 @@ app.post("/api/notes", (req, res) => {
     for (const note of allNotes) {
         allIDs.push(note.id)
     }
-    var nextID = Math.max(...allIDs) + 1;
+    if (Math.max(...allIDs)) {
+        var nextID = Math.max(...allIDs) + 1;
+    } else {
+        var nextID = 1;
+    }
     noteToAdd["id"] = nextID
     allNotes.push(noteToAdd);
     fs.writeFile(path.join(__dirname, "db", "db.json"), JSON.stringify(allNotes), err => {
