@@ -17,6 +17,10 @@ app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/notes.html"))
 })
 
+app.get("/api/notes", (req, res) => {
+    res.json(JSON.parse(fs.readFileSync(path.join(__dirname, "db", "db.json"))))
+})
+
 app.post("/api/notes", (req, res) => {
     var noteToAdd = req.body;
     var allNotes = JSON.parse(fs.readFileSync(path.join(__dirname, "db", "db.json")))
@@ -32,6 +36,8 @@ app.post("/api/notes", (req, res) => {
     })
     res.end()
 })
+
+
 
 app.listen(PORT, () => {
     console.log("App listening on PORT " + PORT)
